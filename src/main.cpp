@@ -12,7 +12,9 @@ protected:
     TextInput* m_fromInput;
     TextInput* m_toInput;
 
-    bool setup() override {
+    bool init() {
+        if (!Popup::init(420.f, 280.f))
+            return false;
         this->setTitle("Set Group ID Range");
 
         auto winSize = CCDirector::sharedDirector()->getWinSize();
@@ -111,7 +113,7 @@ protected:
 public:
     static GroupRangePopup* create() {
         auto ret = new GroupRangePopup();
-        if (ret && ret->initAnchored(420.f, 280.f)) {
+        if (ret && ret->init()) {
             ret->autorelease();
             return ret;
         }
