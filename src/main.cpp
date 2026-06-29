@@ -140,7 +140,7 @@ class $modify(MyEditLevelLayer, EditLevelLayer) {
     }
 };
 
-class $modify(MySetGroupIDLayer, SetGroupIDLayer) {
+class $modify(MySetGroupIDLayer, SetGroupIDLayer, FLAlertLayerProtocol) {
     struct Fields {
         int m_rangeFrom = 0;
         int m_rangeTo = 0;
@@ -161,12 +161,12 @@ class $modify(MySetGroupIDLayer, SetGroupIDLayer) {
         if (m_fields->m_rangeFrom > 0 && m_fields->m_rangeTo > 0) {
             if (id < m_fields->m_rangeFrom || id > m_fields->m_rangeTo) {
                 auto alert = FLAlertLayer::create(
+                    this,
                     "Warning",
                     fmt::format("Group ID {} is outside the set range ({} - {}). Do you want to proceed?", 
                         id, m_fields->m_rangeFrom, m_fields->m_rangeTo),
                     "Cancel", "Ignore"
                 );
-                alert->setDelegate(this);
                 alert->setTag(id);
                 alert->show();
                 return;
@@ -178,8 +178,6 @@ class $modify(MySetGroupIDLayer, SetGroupIDLayer) {
     void FLAlert_Clicked(FLAlertLayer* alert, bool btn2) {
         if (alert->getTag() > 0 && btn2) {
             SetGroupIDLayer::addGroupID(alert->getTag());
-        } else {
-            SetGroupIDLayer::FLAlert_Clicked(alert, btn2);
         }
     }
 
@@ -193,12 +191,12 @@ class $modify(MySetGroupIDLayer, SetGroupIDLayer) {
                     return;
                 } else {
                     auto alert = FLAlertLayer::create(
+                        this,
                         "Warning",
                         fmt::format("No free group IDs available in the range ({} - {}). Do you want to ignore the range?", 
                             m_fields->m_rangeFrom, m_fields->m_rangeTo),
                         "Cancel", "Ignore"
                     );
-                    alert->setDelegate(this);
                     alert->setTag(-2);
                     alert->show();
                     return;
@@ -218,12 +216,12 @@ class $modify(MySetGroupIDLayer, SetGroupIDLayer) {
                     return;
                 } else {
                     auto alert = FLAlertLayer::create(
+                        this,
                         "Warning",
                         fmt::format("No free group IDs available in the range ({} - {}). Do you want to ignore the range?", 
                             m_fields->m_rangeFrom, m_fields->m_rangeTo),
                         "Cancel", "Ignore"
                     );
-                    alert->setDelegate(this);
                     alert->setTag(-3);
                     alert->show();
                     return;
@@ -246,8 +244,11 @@ class $modify(MySetGroupIDLayer, SetGroupIDLayer) {
     std::unordered_set<int> getUsedGroupIDs(LevelEditorLayer* lel) {
         std::unordered_set<int> used;
         auto objects = lel->getAllObjects();
-        CCARRAY_FOREACH_B_TYPE(objects, obj, GameObject) {
-            CCARRAY_FOREACH_B_TYPE(obj->m_groups, group, CCInteger) {
+        for (unsigned int i = 0; i < objects->count(); ++i) {
+            auto obj = static_cast<GameObject*>(objects->objectAtIndex(i));
+            auto groups = obj->m_groups;
+            for (unsigned int j = 0; j < groups->count(); ++j) {
+                auto group = static_cast<CCInteger*>(groups->objectAtIndex(j));
                 used.insert(group->getValue());
             }
         }
