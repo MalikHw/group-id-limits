@@ -7,7 +7,7 @@
 
 using namespace geode::prelude;
 
-class GroupRangePopup : public Popup {
+class GroupRangePopup : public geode::Popup {
 protected:
     TextInput* m_fromInput;
     TextInput* m_toInput;
@@ -140,7 +140,7 @@ class $modify(MyEditLevelLayer, EditLevelLayer) {
     }
 };
 
-class $modify(MySetGroupIDLayer, SetGroupIDLayer, FLAlertLayerProtocol) {
+class $modify(MySetGroupIDLayer, SetGroupIDLayer) {
     struct Fields {
         int m_rangeFrom = 0;
         int m_rangeTo = 0;
