@@ -7,14 +7,17 @@
         "ios": "2.2081"
     },
     "version": "1.0.0",
-    "id": "MalikHw.group-id-limits",
-    "name": "group-id-limits",
-    "developer": "MalikHw",
+    "id": "malikhw47.group-id-limiter",
+    "name": "group id limiter",
+    "developer": "MalikHw47",
     "description": "desc.",
-    "tags": ["yes", "yeah"],
+    "tags": ["editor", "utility"],
     "links": {
         "source": "https://github.com/MalikHw/group-id-limits",
         "community": "https://discord.gg/G9bZ92eg2n"
     },
-    "settings": {}
+    "dependencies":{
+        "geode.node-ids": ">1.0.0",
+        "alphalaneous.level-storage-api": ">1.0.0"
+    }
 }
