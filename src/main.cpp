@@ -1,12 +1,13 @@
 #include <Geode/Geode.hpp>
 #include <Geode/ui/TextInput.hpp>
+#include <Geode/ui/Popup.hpp>
 #include <Geode/modify/EditLevelLayer.hpp>
 #include <Geode/modify/SetGroupIDLayer.hpp>
 #include <alphalaneous.level-storage-api/include/LevelStorageAPI.hpp>
 
 using namespace geode::prelude;
 
-class GroupRangePopup : public Popup<> {
+class GroupRangePopup : public Popup {
 protected:
     TextInput* m_fromInput;
     TextInput* m_toInput;
